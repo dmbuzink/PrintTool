@@ -32,7 +32,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - id: windows-builder
-        uses: dmbuzink/PrintTool/.github/actions/windows-build-action.yml@${{ github.event.ref }}
+        uses: dmbuzink/PrintTool/.github/actions/windows-build-action.yml@refactor
         with:
           BUILD_CONFIG: ${{env.BUILD_CONFIG}}
           BUILD_ARCHITECTURE: ${{env.BUILD_ARCHITECTURE}}
