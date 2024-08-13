@@ -3,8 +3,10 @@ description: 'Creates a Linux build'
 inputs:
     BUILD_CONFIG:
         required: true
+        description: 'Build configuration, e.g., Release'
     BUILD_ARCHITECTURE:
         required: true
+        description: 'Build architecture, e.g., x64'
 outputs:
 runs:
     using: 'composite'
