@@ -58,12 +58,11 @@ jobs:
     needs: [build_windows]
     environment: printool_windows
     steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: PrintToolWindows
-          path: ${{github.workspace}}/artifacts
-      - run: ${{github.workspace}}/artifacts/PrintTool.exe "Hello" "world" "windows"
-        name: Run print tool
+      - uses: actions/checkout@v4   
+        name: Checkout
+      - id: deploy-windows
+        uses: ./.github/actions/deploy-windows
+        name: 'Deploy Windows'
   deploy_linux:
     name: Deploy for Linux
     if: ${{ vars.SHOULD_SKIP_LINUX == 'false' && github.event_name != 'pull_request' }}
