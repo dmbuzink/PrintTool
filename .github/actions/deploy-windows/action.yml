@@ -1,13 +1,12 @@
-deploy_windows:
-    name: Deploy for Windows
-    if: ${{ github.event_name != 'pull_request' }}
-    runs-on: windows-latest
-    needs: [build_windows]
-    environment: printool_windows
+name: 'Deploys for Windows'
+description: 'Deploys the Windows build'
+runs:
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: PrintToolWindows
           path: ${{github.workspace}}/artifacts
+        shell: pwsh
       - run: ${{github.workspace}}/artifacts/PrintTool.exe "Hello" "world" "windows"
         name: Run print tool
+        shell: pwsh
