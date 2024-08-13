@@ -52,7 +52,7 @@ jobs:
         path: '${{github.workspace}}/artifacts/PrintToolWindows'
   build_linux:
     name: Build for Linux
-    if: ${{ !env.SHOULD_SKIP_LINUX }}
+    if: ${{ env.SHOULD_SKIP_LINUX == 'false' }}
     runs-on: ubuntu-latest
     steps:  
     - uses: actions/checkout@v4   
@@ -87,7 +87,7 @@ jobs:
         name: Run print tool
   deploy_linux:
     name: Deploy for Linux
-    if: ${{ !env.SHOULD_SKIP_LINUX }}
+    if: ${{ env.SHOULD_SKIP_LINUX == 'false' }}
     runs-on: ubuntu-latest
     needs: [build_linux]
     environment: printool_linux
