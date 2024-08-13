@@ -22,6 +22,7 @@ runs:
         global-json-file: global.json
     - run: dotnet restore --locked-mode
       name: Restore packages
+      shell: pwsh
     - run: dotnet build ${{github.workspace}}/PrintTool/PrintTool.csproj --no-restore -c ${{ inputs.BUILD_CONFIG }} -a ${{ inputs.BUILD_ARCHITECTURE }}
       name: Build project for release
     - run: dotnet build ${{github.workspace}}/PrintTool.UnitTests/PrintTool.UnitTests.csproj --no-restore -c ${{ inputs.BUILD_CONFIG }} -a ${{ inputs.BUILD_ARCHITECTURE }}
