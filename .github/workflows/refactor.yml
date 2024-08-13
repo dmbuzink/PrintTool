@@ -71,6 +71,8 @@ jobs:
     needs: [build_linux]
     environment: printool_linux
     steps:
+      - uses: actions/checkout@v4   
+        name: Checkout
       - id: deploy-linux
         uses: ./.github/actions/deploy-linux
         name: 'Deploy linux'
