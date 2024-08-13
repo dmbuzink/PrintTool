@@ -7,7 +7,6 @@ inputs:
     BUILD_ARCHITECTURE:
         required: true
         description: 'Build architecture, e.g., x64'
-outputs:
 runs:
     using: 'composite'
     steps:  
