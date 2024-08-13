@@ -20,7 +20,7 @@ env:
   NUGET_PACKAGES: '${{github.workspace}}/.nuget/packages'
   BUILD_CONFIG: 'Release'
   BUILD_ARCHITECTURE: 'x64'
-  SHOULD_SKIP_LINUX: true
+  SHOULD_SKIP_LINUX: false
 
 defaults:
   run:
@@ -31,8 +31,11 @@ jobs:
     name: Build for Windows
     runs-on: windows-latest
     steps:
+      - uses: actions/checkout@v4   
+        name: Checkout
       - id: windows-builder
-        uses: ./.github/actions
+        uses: ./.github/build-windows
+        name: 'Build for windows'
         with:
           BUILD_CONFIG: ${{env.BUILD_CONFIG}}
           BUILD_ARCHITECTURE: ${{env.BUILD_ARCHITECTURE}}
@@ -41,24 +44,14 @@ jobs:
     if: ${{ !vars.SHOULD_SKIP_LINUX }}
     runs-on: ubuntu-latest
     steps:  
-    - uses: actions/checkout@v4   
-      name: Checkout
-    - uses: actions/setup-dotnet@v4
-      name: Set up dotnet
-    - run: dotnet restore --locked-mode
-      name: Restore packages
-    - run: dotnet build ${{github.workspace}}/PrintTool/PrintTool.csproj --no-restore -c ${{ env.BUILD_CONFIG }} -a ${{ env.BUILD_ARCHITECTURE}}
-      name: Build project for release
-    - run: dotnet build ${{github.workspace}}/PrintTool.UnitTests/PrintTool.UnitTests.csproj --no-restore -c ${{ env.BUILD_CONFIG }} -a ${{ env.BUILD_ARCHITECTURE}}
-      name: Build test project
-    - run: dotnet test ${{github.workspace}}/PrintTool.UnitTests/PrintTool.UnitTests.csproj --no-restore -c ${{ env.BUILD_CONFIG }} -a ${{ env.BUILD_ARCHITECTURE}}
-      name: Run unit tests
-    - run: dotnet publish ${{github.workspace}}/PrintTool/PrintTool.csproj -a x64 --output ${{github.workspace}}/artifacts/PrintToolLinux --no-restore -c ${{ env.BUILD_CONFIG }}
-      name: Publish project and upload to artifact
-    - uses: actions/upload-artifact@v4
-      with:
-        name: PrintToolLinux
-        path: '${{github.workspace}}/artifacts/PrintToolLinux'
+      - uses: actions/checkout@v4   
+        name: Checkout
+      - id: linux-builder
+        uses: ./.github/build-linux
+        name: 'Build for Linux'
+        with:
+          BUILD_CONFIG: ${{env.BUILD_CONFIG}}
+          BUILD_ARCHITECTURE: ${{env.BUILD_ARCHITECTURE}}
   deploy_windows:
     name: Deploy for Windows
     if: ${{ github.event_name != 'pull_request' }}
@@ -79,11 +72,6 @@ jobs:
     needs: [build_linux]
     environment: printool_linux
     steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: PrintToolLinux
-          path: ${{github.workspace}}/artifacts
-      - run: chmod 777 ${{github.workspace}}/artifacts/PrintTool
-        name: Giving permissions to project folder
-      - run: ${{github.workspace}}/artifacts/PrintTool "Hello" "world" "linux"
-        name: Run print tool
+      - id: deploy-linux
+        uses: ./.github/deploy-linux
+        name: 'Deploy linux'
