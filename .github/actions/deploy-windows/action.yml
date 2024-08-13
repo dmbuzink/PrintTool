@@ -6,7 +6,6 @@ runs:
         with:
           name: PrintToolWindows
           path: ${{github.workspace}}/artifacts
-        shell: pwsh
       - run: ${{github.workspace}}/artifacts/PrintTool.exe "Hello" "world" "windows"
         name: Run print tool
         shell: pwsh
