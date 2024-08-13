@@ -8,6 +8,9 @@ inputs:
     required: true
     description: 'Build architecture, e.g., x64'
 ouputs:
+defaults:
+  run:
+    shell: pwsh
 runs:
   using: "composite"
   steps:  
