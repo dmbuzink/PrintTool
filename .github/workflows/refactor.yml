@@ -31,8 +31,6 @@ jobs:
     name: Build for Windows
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4   
-        name: Checkout
       - id: windows-builder
         uses: ./.github/actions
         with:
