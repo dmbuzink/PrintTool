@@ -20,7 +20,6 @@ env:
   NUGET_PACKAGES: '${{github.workspace}}/.nuget/packages'
   BUILD_CONFIG: 'Release'
   BUILD_ARCHITECTURE: 'x64'
-  SHOULD_SKIP_LINUX: false
 
 defaults:
   run:
