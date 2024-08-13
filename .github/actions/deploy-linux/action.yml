@@ -1,0 +1,15 @@
+deploy_linux:
+    name: Deploy for Linux
+    if: ${{ !vars.SHOULD_SKIP_LINUX && github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+    needs: [build_linux]
+    environment: printool_linux
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: PrintToolLinux
+          path: ${{github.workspace}}/artifacts
+      - run: chmod 777 ${{github.workspace}}/artifacts/PrintTool
+        name: Giving permissions to project folder
+      - run: ${{github.workspace}}/artifacts/PrintTool "Hello" "world" "linux"
+        name: Run print tool
