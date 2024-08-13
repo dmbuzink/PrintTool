@@ -75,6 +75,7 @@ jobs:
         path: '${{github.workspace}}/artifacts/PrintToolLinux'
   deploy_windows:
     name: Deploy for Windows
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: windows-latest
     needs: [build_windows]
     environment: printool_windows
@@ -87,7 +88,7 @@ jobs:
         name: Run print tool
   deploy_linux:
     name: Deploy for Linux
-    if: ${{ !vars.SHOULD_SKIP_LINUX }}
+    if: ${{ !vars.SHOULD_SKIP_LINUX && github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     needs: [build_linux]
     environment: printool_linux
