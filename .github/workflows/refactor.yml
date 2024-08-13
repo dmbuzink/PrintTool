@@ -39,7 +39,7 @@ jobs:
       name: Build project for release
     - run: dotnet build ${{github.workspace}}/PrintTool.UnitTests/PrintTool.UnitTests.csproj --no-restore -c Release -a x64
       name: Build test project
-    - run: dotnet test ${{github.workspace}}/PrintTool.UnitTests/PrintTool.UnitTests.csproj
+    - run: dotnet test ${{github.workspace}}/PrintTool.UnitTests/PrintTool.UnitTests.csproj --no-restore -c Release -a x64
       name: Run unit tests
     - run: dotnet publish ${{github.workspace}}/PrintTool/PrintTool.csproj -a x64 --output ${{github.workspace}}/artifacts/PrintToolWindows --no-restore -c Release
       name: Publish project and upload to artifact
