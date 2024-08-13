@@ -1,9 +1,9 @@
-deploy_linux:
-    name: Deploy for Linux
-    if: ${{ !vars.SHOULD_SKIP_LINUX && github.event_name != 'pull_request' }}
-    runs-on: ubuntu-latest
-    needs: [build_linux]
-    environment: printool_linux
+name: 'Deploy for Linux'
+description: 'Creates a Linux build'
+inputs:
+outputs:
+runs:
+    using: 'composite'
     steps:
       - uses: actions/download-artifact@v4
         with:
