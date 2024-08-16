@@ -29,10 +29,10 @@ jobs:
   main_matrix:
     strategy: 
       matrix:
-        - os: 
-          - version: ubuntu-latest
+        include: 
+          - os: ubuntu-latest
             name: "Linux"
-          - version: windows-latest
+          - os: windows-latest
             name: "Windows"
     runs-on: ${{ matrix.os.version }}
     environment: "$printtool_${{ matrix.os.name }}"
@@ -50,7 +50,7 @@ jobs:
       - id: deploy
         uses: dmbuzink/PrintToolWorkflows/.github/actions/deploy@master
         if: ${{ github.event_name != 'pull_request' }}
-        name: "$Deploy {{ matrix.os.name }}"
+        name: "Deploy ${{ matrix.os.name }}"
         with:
           OS_VERSION: ${{ matrix.os.version }}
           OS_NAME: ${{ matrix.os.name }}
