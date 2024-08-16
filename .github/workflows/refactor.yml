@@ -35,7 +35,6 @@ jobs:
           - os: windows-latest
             name: "Windows"
     runs-on: ${{ matrix.os }}
-    environment: "$printtool_${{ matrix.name }}"
     steps: 
       - uses: actions/checkout@v4   
         name: Checkout
