@@ -41,7 +41,7 @@ jobs:
         name: Checkout
       - id: build
         uses: dmbuzink/PrintToolWorkflows/.github/actions/build@master
-        name: "Build for ${{ matrix.os.name }}"
+        name: "Build for ${{ matrix.name }}"
         with:
           BUILD_CONFIG: ${{env.BUILD_CONFIG}}
           BUILD_ARCHITECTURE: ${{env.BUILD_ARCHITECTURE}}
@@ -50,7 +50,7 @@ jobs:
       - id: deploy
         uses: dmbuzink/PrintToolWorkflows/.github/actions/deploy@master
         if: ${{ github.event_name != 'pull_request' }}
-        name: "Deploy ${{ matrix.os.name }}"
+        name: "Deploy ${{ matrix.name }}"
         with:
           OS_VERSION: ${{ matrix.os }}
           OS_NAME: ${{ matrix.name }}
