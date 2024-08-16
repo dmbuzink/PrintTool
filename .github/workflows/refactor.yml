@@ -26,52 +26,57 @@ defaults:
     shell: pwsh
     
 jobs:
-  build_windows:
-    name: Build for Windows
-    runs-on: windows-latest
-    steps:
+  main_matrix:
+    strategy: 
+      matrix:
+        - os: 
+          - version: ubuntu-latest
+            name: "Linux"
+          - version: windows-latest
+            name: "Windows"
+    runs-on: ${{ matrix.os.version }}
+    environment: "$printtool_${{ matrix.os.name }}"
+    steps: 
       - uses: actions/checkout@v4   
         name: Checkout
-      - id: windows-builder
-        uses: dmbuzink/PrintToolWorkflows/.github/actions/build-windows@master
-        name: 'Build for windows'
+      - id: build
+        uses: dmbuzink/PrintToolWorkflows/.github/actions/build@master
+        name: "Build for ${{ matrix.os.name }}"
         with:
           BUILD_CONFIG: ${{env.BUILD_CONFIG}}
           BUILD_ARCHITECTURE: ${{env.BUILD_ARCHITECTURE}}
-  build_linux:
-    name: Build for Linux
-    if: ${{ vars.SHOULD_SKIP_LINUX == 'false' }}
-    runs-on: ubuntu-latest
-    steps:  
-      - uses: actions/checkout@v4   
-        name: Checkout
-      - id: linux-builder
-        uses: dmbuzink/PrintToolWorkflows/.github/actions/build-linux@master
-        name: 'Build for Linux'
+          OS_VERSION: ${{ matrix.os.version }}
+          OS_NAME: ${{ matrix.os.name }}
+      - id: deploy
+        uses: dmbuzink/PrintToolWorkflows/.github/actions/deploy@master
+        if: ${{ github.event_name != 'pull_request' }}
+        name: "$Deploy {{ matrix.os.name }}"
         with:
-          BUILD_CONFIG: ${{env.BUILD_CONFIG}}
-          BUILD_ARCHITECTURE: ${{env.BUILD_ARCHITECTURE}}
-  deploy_windows:
-    name: Deploy for Windows
-    if: ${{ github.event_name != 'pull_request' }}
-    runs-on: windows-latest
-    needs: [build_windows]
-    environment: printool_windows
-    steps:
-      - uses: actions/checkout@v4   
-        name: Checkout
-      - id: deploy-windows
-        uses: dmbuzink/PrintToolWorkflows/.github/actions/deploy-windows@master
-        name: 'Deploy Windows'
-  deploy_linux:
-    name: Deploy for Linux
-    if: ${{ vars.SHOULD_SKIP_LINUX == 'false' && github.event_name != 'pull_request' }}
-    runs-on: ubuntu-latest
-    needs: [build_linux]
-    environment: printool_linux
-    steps:
-      - uses: actions/checkout@v4   
-        name: Checkout
-      - id: deploy-linux
-        uses: dmbuzink/PrintToolWorkflows/.github/actions/deploy-linux@master
-        name: 'Deploy linux'
+          OS_VERSION: ${{ matrix.os.version }}
+          OS_NAME: ${{ matrix.os.name }}
+        
+        
+
+    # deploy_windows:
+    #   name: Deploy for Windows
+    #   if: ${{ github.event_name != 'pull_request' }}
+    #   runs-on: windows-latest
+    #   needs: [build_windows]
+    #   steps:
+    #     - uses: actions/checkout@v4   
+    #       name: Checkout
+    #     - id: deploy-windows
+    #       uses: dmbuzink/PrintToolWorkflows/.github/actions/deploy-windows@master
+    #       name: 'Deploy Windows'
+    # deploy_linux:
+    #   name: Deploy for Linux
+    #   if: ${{ vars.SHOULD_SKIP_LINUX == 'false' && github.event_name != 'pull_request' }}
+    #   runs-on: ubuntu-latest
+    #   needs: [build_linux]
+    #   environment: printool_linux
+    #   steps:
+    #     - uses: actions/checkout@v4   
+    #       name: Checkout
+    #     - id: deploy-linux
+    #       uses: dmbuzink/PrintToolWorkflows/.github/actions/deploy-linux@master
+    #       name: 'Deploy linux'
