@@ -26,7 +26,7 @@ defaults:
     shell: pwsh
     
 jobs:
-  main_matrix:
+  build_matrix:
     strategy: 
       matrix:
         include: 
@@ -46,6 +46,20 @@ jobs:
           BUILD_ARCHITECTURE: ${{env.BUILD_ARCHITECTURE}}
           OS_VERSION: ${{ matrix.os }}
           OS_NAME: ${{ matrix.name }}
+
+  deploy_matrix:
+    strategy: 
+      matrix:
+        include: 
+          - os: ubuntu-latest
+            name: "Linux"
+          - os: windows-latest
+            name: "Windows"
+    runs-on: ${{ matrix.os }}
+    environment: "PrintTool_${{ inputs.OS_NAME }}"
+    steps: 
+      - uses: actions/checkout@v4   
+        name: Checkout          
       - id: deploy
         uses: dmbuzink/PrintToolWorkflows/.github/actions/deploy@master
         if: ${{ github.event_name != 'pull_request' }}
@@ -53,29 +67,3 @@ jobs:
         with:
           OS_VERSION: ${{ matrix.os }}
           OS_NAME: ${{ matrix.name }}
-        
-        
-
-    # deploy_windows:
-    #   name: Deploy for Windows
-    #   if: ${{ github.event_name != 'pull_request' }}
-    #   runs-on: windows-latest
-    #   needs: [build_windows]
-    #   steps:
-    #     - uses: actions/checkout@v4   
-    #       name: Checkout
-    #     - id: deploy-windows
-    #       uses: dmbuzink/PrintToolWorkflows/.github/actions/deploy-windows@master
-    #       name: 'Deploy Windows'
-    # deploy_linux:
-    #   name: Deploy for Linux
-    #   if: ${{ vars.SHOULD_SKIP_LINUX == 'false' && github.event_name != 'pull_request' }}
-    #   runs-on: ubuntu-latest
-    #   needs: [build_linux]
-    #   environment: printool_linux
-    #   steps:
-    #     - uses: actions/checkout@v4   
-    #       name: Checkout
-    #     - id: deploy-linux
-    #       uses: dmbuzink/PrintToolWorkflows/.github/actions/deploy-linux@master
-    #       name: 'Deploy linux'
