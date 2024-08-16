@@ -51,7 +51,6 @@ jobs:
         with:
           BUILD_CONFIG: ${{env.BUILD_CONFIG}}
           BUILD_ARCHITECTURE: ${{env.BUILD_ARCHITECTURE}}
-          path: ./.github/actions/build-linux
   deploy_windows:
     name: Deploy for Windows
     if: ${{ github.event_name != 'pull_request' }}
