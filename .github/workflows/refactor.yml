@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v4   
         name: Checkout
       - id: windows-builder
-        uses: ./.github/actions/build-windows
+        uses: dmbuzink/PrintToolWorkflows/.github/actions/build-windows@master
         name: 'Build for windows'
         with:
           BUILD_CONFIG: ${{env.BUILD_CONFIG}}
@@ -62,7 +62,7 @@ jobs:
       - uses: actions/checkout@v4   
         name: Checkout
       - id: deploy-windows
-        uses: ./.github/actions/deploy-windows
+        uses: dmbuzink/PrintToolWorkflows/.github/actions/deploy-windows@master
         name: 'Deploy Windows'
   deploy_linux:
     name: Deploy for Linux
@@ -74,5 +74,5 @@ jobs:
       - uses: actions/checkout@v4   
         name: Checkout
       - id: deploy-linux
-        uses: ./.github/actions/deploy-linux
+        uses: dmbuzink/PrintToolWorkflows/.github/actions/deploy-linux@master
         name: 'Deploy linux'
