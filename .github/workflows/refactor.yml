@@ -34,8 +34,8 @@ jobs:
             name: "Linux"
           - os: windows-latest
             name: "Windows"
-    runs-on: ${{ matrix.os.version }}
-    environment: "$printtool_${{ matrix.os.name }}"
+    runs-on: ${{ matrix.os }}
+    environment: "$printtool_${{ matrix.name }}"
     steps: 
       - uses: actions/checkout@v4   
         name: Checkout
@@ -45,15 +45,15 @@ jobs:
         with:
           BUILD_CONFIG: ${{env.BUILD_CONFIG}}
           BUILD_ARCHITECTURE: ${{env.BUILD_ARCHITECTURE}}
-          OS_VERSION: ${{ matrix.os.version }}
-          OS_NAME: ${{ matrix.os.name }}
+          OS_VERSION: ${{ matrix.os }}
+          OS_NAME: ${{ matrix.name }}
       - id: deploy
         uses: dmbuzink/PrintToolWorkflows/.github/actions/deploy@master
         if: ${{ github.event_name != 'pull_request' }}
         name: "Deploy ${{ matrix.os.name }}"
         with:
-          OS_VERSION: ${{ matrix.os.version }}
-          OS_NAME: ${{ matrix.os.name }}
+          OS_VERSION: ${{ matrix.os }}
+          OS_NAME: ${{ matrix.name }}
         
         
 
